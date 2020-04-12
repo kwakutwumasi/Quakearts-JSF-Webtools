@@ -20,7 +20,7 @@ public class DefaultFilter implements Filter {
     /**Default set of packages to ignore
      * 
      */
-    public static final String[] IGNORED_PACKAGES = {
+    protected static final String[] IGNORED_PACKAGES = {
         "java", "javax",
         "sun", "com.sun",
         "apple", "com.apple",

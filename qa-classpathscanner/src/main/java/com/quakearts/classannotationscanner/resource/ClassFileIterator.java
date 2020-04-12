@@ -37,7 +37,7 @@ public class ClassFileIterator implements ResourceInputStreamIterator {
      * @param filter The {@link Filter} object to use to skip files
      */
     public ClassFileIterator(File file, Filter filter) {
-        files = new ArrayList<File>();
+        files = new ArrayList<>();
         if(file.isDirectory())
         	rootDir = file;
         else
@@ -57,8 +57,8 @@ public class ClassFileIterator implements ResourceInputStreamIterator {
      * @throws Exception
      */
     private void init(List<File> list, File dir, Filter filter) throws Exception {
-        File[] files = dir.listFiles();
-        for (File file:files) {
+        File[] initFiles = dir.listFiles();
+        for (File file:initFiles) {
             if (file.isDirectory()) {
             	init(list, file, filter);
             } else {
@@ -79,7 +79,7 @@ public class ClassFileIterator implements ResourceInputStreamIterator {
         if (index >= files.size()){
             return null;
         }
-        File fp = (File) files.get(index++);
+        File fp = files.get(index++);
         try {
             return new FileInputStream(fp);
         } catch (FileNotFoundException e) {
@@ -92,5 +92,6 @@ public class ClassFileIterator implements ResourceInputStreamIterator {
      */
     @Override
     public void close() {
+    	//Do nothing
     }
 }

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.quakearts.classannotationscanner.exception.ScannerRuntimeException;
 import com.quakearts.classannotationscanner.resource.ClassFileIterator;
 import com.quakearts.classannotationscanner.resource.JarFileIterator;
 import com.quakearts.classannotationscanner.resource.ResourceInputStreamIterator;
@@ -62,9 +63,11 @@ public class ClasspathScanner extends URLResourceScanner {
 	 */
 	@Override
     protected final URL[] findResources() {
-        URL[] ret = getUrlsForCurrentClasspath();
-        if (ret.length == 0) ret = getUrlsForSystemClasspath();
-        return ret;
+		List<URL> urls = new ArrayList<>();
+        urls.addAll(Arrays.asList(getUrlsForCurrentClasspath()));
+        urls.addAll(Arrays.asList(getUrlsForSystemClasspath()));
+
+        return urls.toArray(new URL[urls.size()]);
     }
 
     /* (non-Javadoc)
@@ -118,26 +121,33 @@ public class ClasspathScanner extends URLResourceScanner {
      * @return an array of {@link URL}s to iterate over
      */
     private URL[] getUrlsForCurrentClasspath() {
-        List<URL> list = new ArrayList<URL>();
+        List<URL> list = new ArrayList<>();
 
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         while (loader != null) {
             if (loader instanceof URLClassLoader) {
-                URL[]     urlArray = ((URLClassLoader) loader).getURLs();
-                List<URL> urlList  = Arrays.asList(urlArray);
-                list.addAll(urlList);
+                handleUrlClassloaderClasses(list, loader);
             }
             loader = loader.getParent();
         }
         return list.toArray(new URL[list.size()]);
     }
 
+	private void handleUrlClassloaderClasses(List<URL> list, ClassLoader loader) {
+		URL[]     urlArray = ((URLClassLoader) loader).getURLs();
+		List<URL> urlList  = Arrays.asList(urlArray);
+		list.addAll(urlList);
+	}
+
     /**Looks for {@link URL}s from the system class path
      * @return an array of {@link URL}s to iterate over
      */
     private URL[] getUrlsForSystemClasspath() {
-        List<URL> list = new ArrayList<URL>();
+        List<URL> list = new ArrayList<>();
         String classpath = System.getProperty("java.class.path");
+        if(classpath == null)
+        	classpath = System.getProperty("jdk.module.main");
+        
         StringTokenizer tokenizer = new StringTokenizer(classpath,
                 File.pathSeparator);
 
@@ -146,12 +156,12 @@ public class ClasspathScanner extends URLResourceScanner {
 
             File fp = new File(path);
             if (!fp.exists())
-                throw new RuntimeException(
+                throw new ScannerRuntimeException(
                         "File in java.class.path does not exist: " + fp);
             try {
                 list.add(fp.toURI().toURL());
             } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
+                throw new ScannerRuntimeException(e);
             }
         }
         return list.toArray(new URL[list.size()]);

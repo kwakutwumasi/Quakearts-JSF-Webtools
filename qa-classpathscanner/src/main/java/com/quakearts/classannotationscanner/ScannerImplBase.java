@@ -14,7 +14,6 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-//import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,10 +34,10 @@ import javassist.bytecode.annotation.Annotation;
 public abstract class ScannerImplBase implements Scanner {
 
     private final Map<String, Set<ClassAnnotationScanningListener>> classAnnotationListeners =
-        new HashMap<String, Set<ClassAnnotationScanningListener>>();
+        new HashMap<>();
 
     private final Map<String, Set<ClassAnnotationObjectScanningListener>> classAnnotationObjectListeners =
-    	new HashMap<String, Set<ClassAnnotationObjectScanningListener>>();
+    	new HashMap<>();
 
     static final Logger log = Logger.getLogger("Scanner");
     
@@ -66,11 +65,7 @@ public abstract class ScannerImplBase implements Scanner {
         }
 
         for (String annotation : annotations) {
-            Set<L> listeners = map.get(annotation);
-            if (null == listeners) {
-                listeners = new HashSet<L>();
-                map.put(annotation, listeners);
-            }
+            Set<L> listeners = map.computeIfAbsent(annotation, key-> new HashSet<>());
             listeners.add(listener);
         }
     }
@@ -95,7 +90,7 @@ public abstract class ScannerImplBase implements Scanner {
      * @param classFile {@link ClassFile} object to search for annotations
      */
     protected void scanAndNotifyForClassAnnotations(ClassFile classFile) {
-        Set<Annotation> annotations = new HashSet<Annotation>();
+        Set<Annotation> annotations = new HashSet<>();
 
 		AnnotationsAttribute visibleA = (AnnotationsAttribute) classFile.getAttribute(AnnotationsAttribute.visibleTag);
         if (visibleA != null) annotations.addAll(Arrays.asList(visibleA.getAnnotations()));

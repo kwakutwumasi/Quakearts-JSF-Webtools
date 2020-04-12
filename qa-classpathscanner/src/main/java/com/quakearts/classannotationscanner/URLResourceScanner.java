@@ -13,6 +13,7 @@ package com.quakearts.classannotationscanner;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.logging.Level;
 
 import com.quakearts.classannotationscanner.exception.ScannerRuntimeException;
 import com.quakearts.classannotationscanner.resource.ResourceInputStreamIterator;
@@ -44,7 +45,8 @@ public abstract class URLResourceScanner extends ScannerImplBase {
                 throw new ScannerRuntimeException(e);
             }
         }
-    	log.info("Annotation scanning completed in "+((System.nanoTime()-starttime)/1000000)+" ms");
+    	log.log(Level.INFO, "Annotation scanning completed in {0} ms",
+    			((System.nanoTime()-starttime)/1000000));
     }
 
     protected abstract ResourceInputStreamIterator getResourceIterator(URL url, Filter filter) throws IOException;

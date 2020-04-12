@@ -102,6 +102,7 @@ public final class JarFileIterator implements ResourceInputStreamIterator {
             closed = true;
             jarInputStream.close();
         } catch (IOException ioe) {
+        	//Ignore
         }
     }
 
@@ -173,7 +174,7 @@ public final class JarFileIterator implements ResourceInputStreamIterator {
          * @see java.io.InputStream#mark(int)
          */
         @Override
-        public void mark(int i) {
+        public synchronized void mark(int i) {
         	is.mark(i);
         }
 
@@ -181,7 +182,7 @@ public final class JarFileIterator implements ResourceInputStreamIterator {
          * @see java.io.InputStream#reset()
          */
         @Override
-        public void reset() throws IOException {
+        public synchronized void reset() throws IOException {
             is.reset();
         }
 

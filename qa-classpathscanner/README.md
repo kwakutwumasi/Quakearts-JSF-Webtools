@@ -3,7 +3,7 @@
 A classpath scanner inspired by [Annovention](http://code.google.com/p/annovention/) developed by Animesh Kumar.
 
 ##### Requirements
-* Java 8+
+* Java 11+
 * Maven
 
 ##### Quick Start
@@ -26,7 +26,7 @@ then add the dependency
 <dependency>
 	<groupId>com.quakearts.webtools</groupId>
 	<artifactId>qa-classpathscanner</artifactId>
-	<version>1.0.1</version>
+	<version>2.0.0</version>
 </dependency>
 
 ```
