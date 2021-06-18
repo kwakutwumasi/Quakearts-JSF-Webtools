@@ -46,7 +46,7 @@
 		<tomcat.version>9.0.48</tomcat.version>
 		<tomcat.juli.version>9.0.0.M6</tomcat.juli.version>
 		<atomikos.version>5.0.6</atomikos.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<geronimo.version>1.1.1</geronimo.version>
 		<derby.version>10.13.1.1</derby.version>
 		<jspapi.version>2.3.3</jspapi.version>
