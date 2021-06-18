@@ -39,7 +39,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<tomcat.version>9.0.27</tomcat.version>
+		<tomcat.version>9.0.41</tomcat.version>
 		<tomcat.juli.version>9.0.0.M6</tomcat.juli.version>
 	</properties>
 	<dependencies>
